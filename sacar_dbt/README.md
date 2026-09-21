@@ -1,15 +1,47 @@
-Welcome to your new dbt project!
+# sacar_dbt
 
-### Using the starter project
+dbt project that transforms raw car rental data (branches, customers, vehicles, rental agreements) into a star schema for analytics, sourced from the `sacar-portfolio` BigQuery project.
 
-Try running the following commands:
-- dbt run
-- dbt test
+## Structure
 
+```
+models/
+├── staging/    pulls necessary tables from sacar_raw source (stg_branch, stg_customers, stg_vehicle, stg_vehicle_models, stg_rental_agreement)
+└── marts/      
+    ├── dim_branch
+    ├── dim_customer
+    ├── dim_vehicle
+    ├── dim_date
+    └── fact_rental_agreement
+```
 
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+Sources are declared in [`models/staging/_sacar__sources.yml`](models/staging/_sacar__sources.yml) (`sacar_raw` schema) and mart tests/descriptions live in [`models/marts/_sacar__marts.yml`](models/marts/_sacar__marts.yml).
+
+## Seeds
+
+- `subscription_tiers.csv` — subscription tier discount and late fee rates, joined into `dim_customer`.
+
+## Setup
+
+**1. Configure your dbt profile**
+
+This project targets BigQuery (`profile: sacar_dbt`, database `sacar-portfolio`). Set up a `profiles.yml` entry with a service account key or `gcloud` auth — see [dbt-bigquery setup](https://docs.getdbt.com/reference/warehouse-setups/bigquery-setup).
+
+**2. Install dependencies and seed reference data**
+
+```bash
+dbt deps
+dbt seed
+```
+
+**3. Run and test**
+
+```bash
+dbt run
+dbt test
+```
+
+## Notes
+
+- `staging` models are materialized as views, `marts` as tables (see [`dbt_project.yml`](dbt_project.yml)).
+- Foreign keys on `fact_rental_agreement` (`customer_id`, `vehicle_id`, `pickup_branch_id`, `dropoff_branch_id`, `rental_start_date_id`) are covered by `relationships` tests against their respective dimensions.
