@@ -1,0 +1,4 @@
+tier_name,discount_rate,late_fee_multiplier
+None,0.00,1.00
+Basic,0.10,1.00
+Premium,0.20,0.50

@@ -1,0 +1,86 @@
+version: 2
+
+models:
+  - name: dim_branch
+    description: One row per branch location. Used as a role-playing dimension on fact_rental_agreement for both pickup and dropoff.
+    columns:
+      - name: branch_id
+        description: Primary key for the branch.
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_customer
+    description: One row per customer, enriched with subscription tier discount and late fee rates from the subscription_tiers seed.
+    columns:
+      - name: customer_id
+        description: Primary key for the customer.
+        tests:
+          - unique
+          - not_null
+      - name: subscription_tier
+        description: Customer's subscription tier (None, Basic, Premium), used to join against subscription_tiers.
+        tests:
+          - accepted_values:
+              values: ['None', 'Basic', 'Premium']
+
+  - name: dim_vehicle
+    description: One row per vehicle, denormalized with its vehicle model attributes (make, model, year, body type, fuel type, base daily rate).
+    columns:
+      - name: vehicle_id
+        description: Primary key for the vehicle.
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_date
+    description: Calendar date dimension spanning 2023-01-01 to 2027-12-31, generated via generate_date_array (not sourced from a raw table).
+    columns:
+      - name: date_id
+        description: Surrogate key in YYYYMMDD integer format.
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_rental_agreement
+    description: One row per rental agreement, at rental-agreement grain (not rental-day).
+    columns:
+      - name: rental_id
+        description: Primary key for the rental agreement.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Foreign key to dim_customer.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_id
+      - name: vehicle_id
+        description: Foreign key to dim_vehicle.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_vehicle')
+              field: vehicle_id
+      - name: pickup_branch_id
+        description: Foreign key to dim_branch — the branch where the vehicle was picked up.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_branch')
+              field: branch_id
+      - name: dropoff_branch_id
+        description: Foreign key to dim_branch — the branch where the vehicle was returned, if different from pickup.
+        tests:
+          - relationships:
+              to: ref('dim_branch')
+              field: branch_id
+      - name: rental_start_date_id
+        description: Foreign key to dim_date, derived from starting_rental_date.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_id

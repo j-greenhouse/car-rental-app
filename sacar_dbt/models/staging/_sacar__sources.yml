@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: sacar_raw
+    database: sacar-portfolio
+    schema: sacar_raw
+    tables:
+      - name: rental_agreement
+      - name: branch
+      - name: employees
+      - name: customers
+      - name: vehicle
+      - name: vehicle_models
+      - name: maintenance
+      - name: accident

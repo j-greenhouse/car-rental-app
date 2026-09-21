@@ -1,0 +1,13 @@
+.env
+__pycache__/
+*.pyc
+venv/
+.DS_Store
+node_modules/
+frontend/
+scripts/
+logs/
+sacar_dbt/target/
+sacar_dbt/logs/
+sacar_dbt/dbt_packages/
+sacar_dbt/*.json
