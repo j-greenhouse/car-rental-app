@@ -40,8 +40,3 @@ dbt seed
 dbt run
 dbt test
 ```
-
-## Notes
-
-- `staging` models are materialized as views, `marts` as tables (see [`dbt_project.yml`](dbt_project.yml)).
-- Foreign keys on `fact_rental_agreement` (`customer_id`, `vehicle_id`, `pickup_branch_id`, `dropoff_branch_id`, `rental_start_date_id`) are covered by `relationships` tests against their respective dimensions.
