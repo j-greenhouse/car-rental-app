@@ -9,7 +9,7 @@ models/
 ├── staging/    pulls necessary tables from sacar_raw source (stg_branch, stg_customers, stg_vehicle, stg_vehicle_models, stg_rental_agreement)
 └── marts/      
     ├── dim_branch
-    ├── dim_customer
+    ├── dim_customers
     ├── dim_vehicle
     ├── dim_date
     └── fact_rental_agreement

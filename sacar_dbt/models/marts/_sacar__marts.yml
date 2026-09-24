@@ -10,7 +10,7 @@ models:
           - unique
           - not_null
 
-  - name: dim_customer
+  - name: dim_customers
     description: One row per customer, enriched with subscription tier discount and late fee rates from the subscription_tiers seed.
     columns:
       - name: customer_id
@@ -34,7 +34,7 @@ models:
           - not_null
 
   - name: dim_date
-    description: Calendar date dimension spanning 2023-01-01 to 2027-12-31, generated via generate_date_array (not sourced from a raw table).
+    description: Calendar date dimension spanning 2021-01-01 to 2024-01-03, generated via generate_date_array (not sourced from a raw table).
     columns:
       - name: date_id
         description: Surrogate key in YYYYMMDD integer format.
@@ -51,7 +51,7 @@ models:
           - unique
           - not_null
       - name: customer_id
-        description: Foreign key to dim_customer.
+        description: Foreign key to dim_customers.
         tests:
           - not_null
           - relationships:
