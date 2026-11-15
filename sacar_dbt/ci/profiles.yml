@@ -1,0 +1,11 @@
+sacar_dbt:
+  target: ci
+  outputs:
+    ci:
+      type: bigquery
+      method: service-account
+      project: sacar-portfolio
+      dataset: sacar_dbt_ci
+      keyfile: "{{ env_var('GCP_KEYFILE_PATH') }}"
+      location: us-south1
+      threads: 4
