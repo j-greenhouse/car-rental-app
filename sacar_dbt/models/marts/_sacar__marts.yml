@@ -55,7 +55,7 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('dim_customer')
+              to: ref('dim_customers')
               field: customer_id
       - name: vehicle_id
         description: Foreign key to dim_vehicle.
