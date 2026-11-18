@@ -84,3 +84,7 @@ models:
           - relationships:
               to: ref('dim_date')
               field: date_id
+      - name: rental_duration_days
+        description: Rental length in days, from starting_rental_date to actual_return_date (or expected_return_date if the rental is still active). Same-day rentals count as 1 day.
+        tests:
+          - not_null
