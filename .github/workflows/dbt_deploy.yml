@@ -1,0 +1,33 @@
+name: dbt Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  dbt-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sacar_dbt
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dbt
+        run: pip install dbt-bigquery==1.12.1
+
+      - name: Write GCP key
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: printf '%s' "$GCP_SA_KEY" > "$RUNNER_TEMP/gcp_key.json"
+
+      - name: dbt build (prod)
+        env:
+          GCP_KEYFILE_PATH: ${{ runner.temp }}/gcp_key.json
+        run: dbt build --profiles-dir ci --target prod
