@@ -15,6 +15,14 @@ select
     base_rental_cost,
     late_fee,
     total_cost,
+    greatest(
+        date_diff(
+            date(coalesce(actual_return_date, expected_return_date)),
+            date(starting_rental_date),
+            day
+        ),
+        1
+    ) as rental_duration_days,
     cast(format_date('%Y%m%d', date(starting_rental_date)) as int64) as rental_start_date_id,
     cast(format_date('%Y%m%d', date(expected_return_date)) as int64) as expected_return_date_id,
     case when actual_return_date is not null
