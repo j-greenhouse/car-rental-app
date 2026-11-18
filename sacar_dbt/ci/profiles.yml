@@ -9,3 +9,11 @@ sacar_dbt:
       keyfile: "{{ env_var('GCP_KEYFILE_PATH') }}"
       location: us-south1
       threads: 4
+    prod:
+      type: bigquery
+      method: service-account
+      project: sacar-portfolio
+      dataset: sacar_dbt
+      keyfile: "{{ env_var('GCP_KEYFILE_PATH') }}"
+      location: us-south1
+      threads: 4
